@@ -6,6 +6,7 @@
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
   <data name="WindowsOnly" xml:space="preserve"><value>此應用程式僅支援 Windows。</value></data>
   <data name="InvalidArguments" xml:space="preserve"><value>無效的參數。請使用 register、unregister、--on 或 --off。</value></data>
+  <data name="DelegatingToTask" xml:space="preserve"><value>[排程] 已找到相符的已註冊排程，將不經 UAC 直接啟動。</value></data>
   <data name="UnregisterSuccess" xml:space="preserve"><value>完成。VRNicOn 與 VRNicOff 排程已移除；程式、記錄及備份檔案均保留。</value></data>
   <data name="Failure" xml:space="preserve"><value>[失敗] {0}</value></data>
   <data name="ProcessPathMissing" xml:space="preserve"><value>找不到目前執行檔路徑。</value></data>

@@ -6,6 +6,7 @@
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
   <data name="WindowsOnly" xml:space="preserve"><value>このアプリケーションは Windows 専用です。</value></data>
   <data name="InvalidArguments" xml:space="preserve"><value>引数が無効です。register、unregister、--on、または --off を使用してください。</value></data>
+  <data name="DelegatingToTask" xml:space="preserve"><value>[タスク] 一致する登録済みタスクを検出しました。UAC なしで開始します。</value></data>
   <data name="UnregisterSuccess" xml:space="preserve"><value>完了しました。VRNicOn と VRNicOff のタスクを削除しました。アプリケーション、ログ、バックアップファイルは保持されます。</value></data>
   <data name="Failure" xml:space="preserve"><value>[失敗] {0}</value></data>
   <data name="ProcessPathMissing" xml:space="preserve"><value>現在の実行ファイルのパスを特定できませんでした。</value></data>

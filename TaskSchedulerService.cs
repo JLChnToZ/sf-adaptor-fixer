@@ -7,7 +7,7 @@ namespace SFAdaptorFixer;
 
 [SupportedOSPlatform("windows")]
 public sealed class TaskSchedulerService(WindowsCommandRunner commandRunner) {
-    private static readonly UTF8Encoding Utf8NoBom = new(false);
+    private static readonly Encoding Encoding = Encoding.Unicode;
     private static readonly XNamespace TaskNamespace = "http://schemas.microsoft.com/windows/2004/02/mit/task";
     private const string TRUE = "true";
     private const string FALSE = "false";
@@ -16,12 +16,7 @@ public sealed class TaskSchedulerService(WindowsCommandRunner commandRunner) {
         var xmlPath = Path.Combine(Path.GetTempPath(), $"VRNic-{Guid.NewGuid():N}.xml");
         try {
             var document = BuildTaskDocument(arguments, description, userName);
-            var writerSettings = new XmlWriterSettings {
-                Encoding = Utf8NoBom,
-                Indent = true
-            };
-            using (var writer = XmlWriter.Create(xmlPath, writerSettings))
-                document.Save(writer);
+            SaveTaskDocument(document, xmlPath);
 
             _ = await commandRunner.RunRequiredAsync(
                 Path.Combine(Environment.SystemDirectory, "schtasks.exe"),
@@ -99,7 +94,7 @@ public sealed class TaskSchedulerService(WindowsCommandRunner commandRunner) {
                 new XElement(TaskNamespace + "WorkingDirectory", AppPaths.InstallDirectory)));
 
         return new XDocument(
-            new XDeclaration("1.0", "UTF-8", "yes"),
+            new XDeclaration("1.0", "UTF-16", null),
             new XElement(
                 TaskNamespace + "Task",
                 new XAttribute("version", "1.2"),
@@ -111,5 +106,14 @@ public sealed class TaskSchedulerService(WindowsCommandRunner commandRunner) {
                 principals,
                 settings,
                 action));
+    }
+
+    internal static void SaveTaskDocument(XDocument document, string path) {
+        var writerSettings = new XmlWriterSettings {
+            Encoding = Encoding,
+            Indent = true
+        };
+        using var writer = XmlWriter.Create(path, writerSettings);
+        document.Save(writer);
     }
 }

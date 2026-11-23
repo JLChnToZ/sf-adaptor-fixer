@@ -6,6 +6,7 @@
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
   <data name="WindowsOnly" xml:space="preserve"><value>This application supports Windows only.</value></data>
   <data name="InvalidArguments" xml:space="preserve"><value>Invalid arguments. Use register, unregister, --on, or --off.</value></data>
+  <data name="DelegatingToTask" xml:space="preserve"><value>[Task] A matching installed task was found; starting it without UAC.</value></data>
   <data name="UnregisterSuccess" xml:space="preserve"><value>Complete. The VRNicOn and VRNicOff tasks were removed; the application, log, and backup files were preserved.</value></data>
   <data name="Failure" xml:space="preserve"><value>[Failed] {0}</value></data>
   <data name="ProcessPathMissing" xml:space="preserve"><value>The current executable path could not be determined.</value></data>

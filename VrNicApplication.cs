@@ -27,7 +27,22 @@ public static class VrNicApplication {
         try {
             if (parsed.Mode == CommandMode.Interactive) return await RunInteractiveAsync();
 
-            if (!IsAdministrator()) return RelaunchAsAdministrator(args);
+            if (!IsAdministrator()) {
+                if (parsed.Mode is CommandMode.TurnOn or CommandMode.TurnOff) {
+                    using var preflightRunner = new WindowsCommandRunner();
+                    var delegator = new ScheduledTaskDelegator(preflightRunner);
+                    try {
+                        if (await delegator.TryRunAsync(parsed.Mode)) {
+                            ConsoleOutput.WriteMuted(Localization.Get("DelegatingToTask"));
+                            return 0;
+                        }
+                    } catch (Exception ex) when (ex is InvalidOperationException or TimeoutException) {
+                        // A task preflight failure falls back to the existing UAC path.
+                    }
+                }
+
+                return RelaunchAsAdministrator(args);
+            }
 
             using var runner = new WindowsCommandRunner();
             var devices = new NicDeviceService(runner);

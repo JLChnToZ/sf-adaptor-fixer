@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Globalization;
+using System.Text;
 using Xunit;
 
 namespace SFAdaptorFixer.Tests;
@@ -137,6 +138,7 @@ public sealed class CoreBehaviorTests {
             @"DESKTOP\User");
         var ns = document.Root!.Name.Namespace;
 
+        Assert.Equal("UTF-16", document.Declaration?.Encoding);
         Assert.Equal("HighestAvailable", document.Descendants(ns + "RunLevel").Single().Value);
         Assert.Equal("InteractiveToken", document.Descendants(ns + "LogonType").Single().Value);
         Assert.Equal("PT5M", document.Descendants(ns + "ExecutionTimeLimit").Single().Value);
@@ -144,4 +146,88 @@ public sealed class CoreBehaviorTests {
         Assert.Equal("--off", document.Descendants(ns + "Arguments").Single().Value);
         Assert.Equal(AppPaths.InstalledExecutable, document.Descendants(ns + "Command").Single().Value);
     }
+
+    [Fact]
+    public void SaveTaskDocument_WritesUtf16WithBom() {
+        var path = Path.Combine(Path.GetTempPath(), $"vrnic-task-{Guid.NewGuid():N}.xml");
+        try {
+            TaskSchedulerService.SaveTaskDocument(
+                TaskSchedulerService.BuildTaskDocument("--on", "Test task", @"DESKTOP\User"),
+                path);
+
+            var bytes = File.ReadAllBytes(path);
+            Assert.True(bytes.Length >= 2);
+            Assert.Equal(new byte[] { 0xff, 0xfe }, bytes[..2]);
+            Assert.Contains(
+                "encoding=\"utf-16\"",
+                File.ReadAllText(path, Encoding.Unicode),
+                StringComparison.OrdinalIgnoreCase);
+        } finally {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void MatchesRegisteredAction_AcceptsMatchingExecutableAndArgument() {
+        var xml = BuildTaskXml(@"C:\Program Files\VRNic\SFAdaptorFixer.exe", "--on");
+
+        Assert.True(ScheduledTaskDelegator.MatchesRegisteredAction(
+            xml,
+            @"c:\program files\vrnic\sfadaptorfixer.exe",
+            "--on"));
+    }
+
+    [Theory]
+    [InlineData(@"C:\Other\SFAdaptorFixer.exe", "--on")]
+    [InlineData(@"C:\Program Files\VRNic\SFAdaptorFixer.exe", "--off")]
+    [InlineData(@"", "--on")]
+    public void MatchesRegisteredAction_RejectsMismatchedTask(
+        string command,
+        string arguments) {
+        var xml = BuildTaskXml(command, arguments);
+
+        Assert.False(ScheduledTaskDelegator.MatchesRegisteredAction(
+            xml,
+            @"C:\Program Files\VRNic\SFAdaptorFixer.exe",
+            "--on"));
+    }
+
+    [Fact]
+    public void MatchesRegisteredAction_RejectsMalformedXml() {
+        Assert.False(ScheduledTaskDelegator.MatchesRegisteredAction(
+            "<Task",
+            @"C:\Program Files\VRNic\SFAdaptorFixer.exe",
+            "--on"));
+    }
+
+    [Fact]
+    public void MatchesRegisteredAction_RejectsLimitedTask() {
+        Assert.False(ScheduledTaskDelegator.MatchesRegisteredAction(
+            BuildTaskXml(
+                @"C:\Program Files\VRNic\SFAdaptorFixer.exe",
+                "--on",
+                "Limited"),
+            @"C:\Program Files\VRNic\SFAdaptorFixer.exe",
+            "--on"));
+    }
+
+    private static string BuildTaskXml(
+        string command,
+        string arguments,
+        string runLevel = "HighestAvailable") =>
+        $"""
+        <Task xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+          <Principals>
+            <Principal>
+              <RunLevel>{runLevel}</RunLevel>
+            </Principal>
+          </Principals>
+          <Actions>
+            <Exec>
+              <Command>{command}</Command>
+              <Arguments>{arguments}</Arguments>
+            </Exec>
+          </Actions>
+        </Task>
+        """;
 }

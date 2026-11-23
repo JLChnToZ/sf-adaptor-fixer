@@ -6,6 +6,7 @@
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
   <data name="WindowsOnly" xml:space="preserve"><value>此应用程序仅支持 Windows。</value></data>
   <data name="InvalidArguments" xml:space="preserve"><value>无效的参数。请使用 register、unregister、--on 或 --off。</value></data>
+  <data name="DelegatingToTask" xml:space="preserve"><value>[计划任务] 已找到匹配的已注册任务，将不经 UAC 直接启动。</value></data>
   <data name="UnregisterSuccess" xml:space="preserve"><value>完成。VRNicOn 和 VRNicOff 计划任务已移除；程序、日志和备份文件均保留。</value></data>
   <data name="Failure" xml:space="preserve"><value>[失败] {0}</value></data>
   <data name="ProcessPathMissing" xml:space="preserve"><value>找不到当前可执行文件路径。</value></data>
