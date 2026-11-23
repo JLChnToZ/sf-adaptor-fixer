@@ -1,0 +1,2 @@
+dotnet publish .\SFAdaptorFixer.csproj -c Release -r win-x64 --self-contained true
+dotnet publish .\SFAdaptorFixer.csproj -c Release -r win-x64 --self-contained false -o .\bin\Release\net10.0-windows\framework-dependent\

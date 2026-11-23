@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="WindowsOnly" xml:space="preserve"><value>This application supports Windows only.</value></data>
+  <data name="InvalidArguments" xml:space="preserve"><value>Invalid arguments. Use register, unregister, --on, or --off.</value></data>
+  <data name="UnregisterSuccess" xml:space="preserve"><value>Complete. The VRNicOn and VRNicOff tasks were removed; the application, log, and backup files were preserved.</value></data>
+  <data name="Failure" xml:space="preserve"><value>[Failed] {0}</value></data>
+  <data name="ProcessPathMissing" xml:space="preserve"><value>The current executable path could not be determined.</value></data>
+  <data name="ElevationFailed" xml:space="preserve"><value>[Failed] Administrator privileges are required. UAC was cancelled or elevation failed: {0}</value></data>
+  <data name="HelpHeader" xml:space="preserve"><value>Usage:</value></data>
+  <data name="HelpRegister" xml:space="preserve"><value>  SFAdaptorFixer.exe register    Install or update the VRNic scheduled tasks</value></data>
+  <data name="HelpUnregister" xml:space="preserve"><value>  SFAdaptorFixer.exe unregister  Remove the VRNic scheduled tasks</value></data>
+  <data name="HelpOn" xml:space="preserve"><value>  SFAdaptorFixer.exe --on        Reset and enable the Valve 8832CU VR adapter</value></data>
+  <data name="HelpOff" xml:space="preserve"><value>  SFAdaptorFixer.exe --off       Safely disable the Valve 8832CU VR adapter</value></data>
+  <data name="AdminRequired" xml:space="preserve"><value>register and unregister require administrator privileges.</value></data>
+  <data name="MenuTitle" xml:space="preserve"><value>VR Network Adapter Control</value></data>
+  <data name="MenuOn" xml:space="preserve"><value>  1. Enable the VR adapter</value></data>
+  <data name="MenuOff" xml:space="preserve"><value>  2. Disable the VR adapter safely</value></data>
+  <data name="MenuRegister" xml:space="preserve"><value>  3. Register scheduled tasks</value></data>
+  <data name="MenuUnregister" xml:space="preserve"><value>  4. Remove scheduled tasks</value></data>
+  <data name="MenuExit" xml:space="preserve"><value>  0. Exit</value></data>
+  <data name="MenuPrompt" xml:space="preserve"><value>Select an action [0-4]: </value></data>
+  <data name="MenuInvalidSelection" xml:space="preserve"><value>Invalid selection. Choose 0, 1, 2, 3, or 4.</value></data>
+  <data name="PressEnter" xml:space="preserve"><value>&#10;Press Enter to close</value></data>
+  <data name="ProgramFilesMissing" xml:space="preserve"><value>The ProgramFiles environment variable could not be found.</value></data>
+  <data name="OnTitle" xml:space="preserve"><value>Enable VR adapter</value></data>
+  <data name="OffTitle" xml:space="preserve"><value>Disable VR adapter</value></data>
+  <data name="ResetAttempt" xml:space="preserve"><value> [{0}/{1}] Resetting the 8832CU adapter and enabling the wireless interface...</value></data>
+  <data name="Scanning6GHz" xml:space="preserve"><value>        Scanning for the Steam Frame 6 GHz signal...</value></data>
+  <data name="OffStep1" xml:space="preserve"><value> [1/2] Disabling the wireless interface...</value></data>
+  <data name="OffStep2" xml:space="preserve"><value> [2/2] Safely disabling the 8832CU device...</value></data>
+  <data name="OffDeviceMissing" xml:space="preserve"><value> [Notice] The Valve 8832CU adapter was not found (unplugged); no action is required.</value></data>
+  <data name="OffSuccess" xml:space="preserve"><value> [Success] The adapter was disabled and its driver was unloaded.</value></data>
+  <data name="OffPowerSafe" xml:space="preserve"><value> It is now safe to turn off the ceiling light and external power.</value></data>
+  <data name="OffUnconfirmed" xml:space="preserve"><value> [Warning] Disabling was not confirmed (state: {0}). Do not remove power; check the computer first.</value></data>
+  <data name="OnSuccess" xml:space="preserve"><value> [Success] The adapter is enabled, a 6 GHz signal was detected, and Steam Frame streaming can begin.</value></data>
+  <data name="OnNo6GHz" xml:space="preserve"><value> [Failed] The adapter is enabled, but no 6 GHz signal was found after {0} resets.</value></data>
+  <data name="OnNo6GHzTip1" xml:space="preserve"><value>        1. Confirm that the headset is on (its streaming AP broadcasts only while powered on).</value></data>
+  <data name="OnNo6GHzTip2" xml:space="preserve"><value>        2. Unplug the adapter from the hub for 10 seconds, reconnect it for a full power reset, and try again.</value></data>
+  <data name="OnNotPresent" xml:space="preserve"><value> [Notice] The adapter was set to enabled, but it could not be detected. Confirm that external hub power is on.</value></data>
+  <data name="OnWillRecover" xml:space="preserve"><value>        The adapter will come online automatically after power is restored; no rerun is required.</value></data>
+  <data name="OnDeviceMissing" xml:space="preserve"><value> [Failed] The Valve 8832CU adapter ({0}) was not found. Confirm that the adapter is connected.</value></data>
+  <data name="OnStateUnexpected" xml:space="preserve"><value> [Failed] Unexpected adapter state: {0}</value></data>
+  <data name="ConsoleUserMismatch" xml:space="preserve"><value>The elevated process is running as {0}, but the desktop user is {1}. Give {1} administrator privileges and approve UAC without switching accounts.</value></data>
+  <data name="RegisterDeviceMissing" xml:space="preserve"><value>[Notice] The Valve 8832CU adapter is currently missing. Registration will continue; --on and --off will discover it at runtime.</value></data>
+  <data name="OnTaskDescription" xml:space="preserve"><value>Enable the Valve 8832CU VR adapter (no UAC prompt)</value></data>
+  <data name="OffTaskDescription" xml:space="preserve"><value>Disable the Valve 8832CU VR adapter before removing power (no UAC prompt)</value></data>
+  <data name="TaskRegistered" xml:space="preserve"><value>[Task] {0} registered (highest privileges)</value></data>
+  <data name="RegisterSuccess" xml:space="preserve"><value>Complete. VRNicOn and VRNicOff were registered and will run without another UAC prompt.</value></data>
+  <data name="TaskRunHint" xml:space="preserve"><value>Run a task with schtasks /run /tn "VRNicOn" or schtasks /run /tn "VRNicOff".</value></data>
+  <data name="LogPath" xml:space="preserve"><value>Log: {0}</value></data>
+  <data name="ProgramInstalled" xml:space="preserve"><value>[Application] {0}</value></data>
+  <data name="ProgramAlreadyInstalled" xml:space="preserve"><value>[Copy skipped] The application is already at {0}</value></data>
+  <data name="TaskNotRegistered" xml:space="preserve"><value>[Task] {0} is not registered; removal skipped.</value></data>
+  <data name="TaskRemoved" xml:space="preserve"><value>[Task] {0} removed</value></data>
+  <data name="RegisterTaskOperation" xml:space="preserve"><value>Register task {0}</value></data>
+  <data name="QueryTaskOperation" xml:space="preserve"><value>Query task {0}</value></data>
+  <data name="UnregisterTaskOperation" xml:space="preserve"><value>Remove task {0}</value></data>
+  <data name="CommandExitCode" xml:space="preserve"><value>[Notice] {0} {1} returned {2}.</value></data>
+  <data name="CannotStart" xml:space="preserve"><value>Could not start {0}.</value></data>
+  <data name="CannotExecute" xml:space="preserve"><value>Could not execute {0}: {1}</value></data>
+  <data name="CommandTimeout" xml:space="preserve"><value>{0} exceeded the {1:0} second timeout.</value></data>
+  <data name="OperationFailedCode" xml:space="preserve"><value>{0} failed with exit code {1}.</value></data>
+  <data name="OperationFailedDetails" xml:space="preserve"><value>{0} failed: {1}</value></data>
+</root>

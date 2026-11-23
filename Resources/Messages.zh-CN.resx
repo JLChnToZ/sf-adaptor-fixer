@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="WindowsOnly" xml:space="preserve"><value>此应用程序仅支持 Windows。</value></data>
+  <data name="InvalidArguments" xml:space="preserve"><value>无效的参数。请使用 register、unregister、--on 或 --off。</value></data>
+  <data name="UnregisterSuccess" xml:space="preserve"><value>完成。VRNicOn 和 VRNicOff 计划任务已移除；程序、日志和备份文件均保留。</value></data>
+  <data name="Failure" xml:space="preserve"><value>[失败] {0}</value></data>
+  <data name="ProcessPathMissing" xml:space="preserve"><value>找不到当前可执行文件路径。</value></data>
+  <data name="ElevationFailed" xml:space="preserve"><value>[失败] 需要管理员权限，UAC 已取消或无法提权：{0}</value></data>
+  <data name="HelpHeader" xml:space="preserve"><value>用法:</value></data>
+  <data name="HelpRegister" xml:space="preserve"><value>  SFAdaptorFixer.exe register    安装或更新 VRNic 计划任务</value></data>
+  <data name="HelpUnregister" xml:space="preserve"><value>  SFAdaptorFixer.exe unregister  移除 VRNic 计划任务</value></data>
+  <data name="HelpOn" xml:space="preserve"><value>  SFAdaptorFixer.exe --on        重置并启用 Valve 8832CU VR 网卡</value></data>
+  <data name="HelpOff" xml:space="preserve"><value>  SFAdaptorFixer.exe --off       安全停用 Valve 8832CU VR 网卡</value></data>
+  <data name="AdminRequired" xml:space="preserve"><value>register 和 unregister 需要管理员权限。</value></data>
+  <data name="MenuTitle" xml:space="preserve"><value>VR 网卡控制</value></data>
+  <data name="MenuOn" xml:space="preserve"><value>  1. 启用 VR 网卡</value></data>
+  <data name="MenuOff" xml:space="preserve"><value>  2. 安全停用 VR 网卡</value></data>
+  <data name="MenuRegister" xml:space="preserve"><value>  3. 注册计划任务</value></data>
+  <data name="MenuUnregister" xml:space="preserve"><value>  4. 移除计划任务</value></data>
+  <data name="MenuExit" xml:space="preserve"><value>  0. 退出</value></data>
+  <data name="MenuPrompt" xml:space="preserve"><value>选择操作 [0-4]: </value></data>
+  <data name="MenuInvalidSelection" xml:space="preserve"><value>选择无效。请选择 0、1、2、3 或 4。</value></data>
+  <data name="PressEnter" xml:space="preserve"><value>&#10;按 Enter 关闭</value></data>
+  <data name="ProgramFilesMissing" xml:space="preserve"><value>找不到 ProgramFiles 系统环境变量。</value></data>
+  <data name="OnTitle" xml:space="preserve"><value>启用 VR 网卡</value></data>
+  <data name="OffTitle" xml:space="preserve"><value>关闭 VR 网卡</value></data>
+  <data name="ResetAttempt" xml:space="preserve"><value> [{0}/{1}] 正在重置 8832CU 网卡并启用无线接口...</value></data>
+  <data name="Scanning6GHz" xml:space="preserve"><value>        正在扫描 Steam Frame 的 6GHz 信号...</value></data>
+  <data name="OffStep1" xml:space="preserve"><value> [1/2] 正在关闭无线网络接口...</value></data>
+  <data name="OffStep2" xml:space="preserve"><value> [2/2] 正在安全停用 8832CU 网卡硬件...</value></data>
+  <data name="OffDeviceMissing" xml:space="preserve"><value> [注意] 找不到 Valve 8832CU 网卡（未插入），无需停用。</value></data>
+  <data name="OffSuccess" xml:space="preserve"><value> [成功] 网卡已停用，驱动已卸载。</value></data>
+  <data name="OffPowerSafe" xml:space="preserve"><value> 现在可以安全关闭天花板灯光和电源。</value></data>
+  <data name="OffUnconfirmed" xml:space="preserve"><value> [警告] 未确认停用状态（状态：{0}）！请勿关灯，先返回电脑确认。</value></data>
+  <data name="OnSuccess" xml:space="preserve"><value> [成功] 网卡已启用，已检测到 6GHz 信号，可以开始 Steam Frame 串流。</value></data>
+  <data name="OnNo6GHz" xml:space="preserve"><value> [失败] 网卡已启用，但重置 {0} 次后仍未扫描到任何 6GHz 信号。</value></data>
+  <data name="OnNo6GHzTip1" xml:space="preserve"><value>        1. 确认头显已开机（头显的串流 AP 仅在开机时广播）</value></data>
+  <data name="OnNo6GHzTip2" xml:space="preserve"><value>        2. 将网卡从 Hub 拔出 10 秒后重新插入（完全断电重置），然后重试一次</value></data>
+  <data name="OnNotPresent" xml:space="preserve"><value> [注意] 已设置为启用，但检测不到网卡：请确认 Hub 的外接电源已开启。</value></data>
+  <data name="OnWillRecover" xml:space="preserve"><value>        电源恢复后网卡会自动上线，无需再次运行。</value></data>
+  <data name="OnDeviceMissing" xml:space="preserve"><value> [失败] 找不到 Valve 8832CU 网卡（{0}）：请确认网卡已连接到电脑。</value></data>
+  <data name="OnStateUnexpected" xml:space="preserve"><value> [失败] 网卡状态异常：{0}</value></data>
+  <data name="ConsoleUserMismatch" xml:space="preserve"><value>当前以 {0} 身份运行，但登录桌面的是 {1}。请赋予 {1} 管理员权限并再次运行（UAC 中不要切换其他账户）。</value></data>
+  <data name="RegisterDeviceMissing" xml:space="preserve"><value>[注意] 当前找不到 Valve 8832CU 网卡，仍会完成注册；运行 --on 或 --off 时会自动查找。</value></data>
+  <data name="OnTaskDescription" xml:space="preserve"><value>启用 Valve 8832CU VR 网卡（免 UAC）</value></data>
+  <data name="OffTaskDescription" xml:space="preserve"><value>关灯断电前停用 Valve 8832CU VR 网卡（免 UAC）</value></data>
+  <data name="TaskRegistered" xml:space="preserve"><value>[计划任务] {0} 已注册（最高权限）</value></data>
+  <data name="RegisterSuccess" xml:space="preserve"><value>完成。VRNicOn 和 VRNicOff 计划任务已注册，不会再次弹出 UAC。</value></data>
+  <data name="TaskRunHint" xml:space="preserve"><value>可使用 schtasks /run /tn "VRNicOn" 或 schtasks /run /tn "VRNicOff" 启动计划任务。</value></data>
+  <data name="LogPath" xml:space="preserve"><value>运行记录：{0}</value></data>
+  <data name="ProgramInstalled" xml:space="preserve"><value>[程序] {0}</value></data>
+  <data name="ProgramAlreadyInstalled" xml:space="preserve"><value>[跳过复制] 程序已位于 {0}</value></data>
+  <data name="TaskNotRegistered" xml:space="preserve"><value>[计划任务] {0} 尚未注册，跳过移除</value></data>
+  <data name="TaskRemoved" xml:space="preserve"><value>[计划任务] {0} 已移除</value></data>
+  <data name="RegisterTaskOperation" xml:space="preserve"><value>注册计划任务 {0}</value></data>
+  <data name="QueryTaskOperation" xml:space="preserve"><value>查询计划任务 {0}</value></data>
+  <data name="UnregisterTaskOperation" xml:space="preserve"><value>移除计划任务 {0}</value></data>
+  <data name="CommandExitCode" xml:space="preserve"><value>[注意] {0} {1} 返回 {2}。</value></data>
+  <data name="CannotStart" xml:space="preserve"><value>无法启动 {0}。</value></data>
+  <data name="CannotExecute" xml:space="preserve"><value>无法运行 {0}：{1}</value></data>
+  <data name="CommandTimeout" xml:space="preserve"><value>{0} 运行超过 {1:0} 秒。</value></data>
+  <data name="OperationFailedCode" xml:space="preserve"><value>{0}失败，退出代码为 {1}。</value></data>
+  <data name="OperationFailedDetails" xml:space="preserve"><value>{0}失败：{1}</value></data>
+</root>

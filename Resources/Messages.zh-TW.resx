@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="WindowsOnly" xml:space="preserve"><value>此應用程式僅支援 Windows。</value></data>
+  <data name="InvalidArguments" xml:space="preserve"><value>無效的參數。請使用 register、unregister、--on 或 --off。</value></data>
+  <data name="UnregisterSuccess" xml:space="preserve"><value>完成。VRNicOn 與 VRNicOff 排程已移除；程式、記錄及備份檔案均保留。</value></data>
+  <data name="Failure" xml:space="preserve"><value>[失敗] {0}</value></data>
+  <data name="ProcessPathMissing" xml:space="preserve"><value>找不到目前執行檔路徑。</value></data>
+  <data name="ElevationFailed" xml:space="preserve"><value>[失敗] 需要系統管理員權限，UAC 被取消或無法提權：{0}</value></data>
+  <data name="HelpHeader" xml:space="preserve"><value>用法:</value></data>
+  <data name="HelpRegister" xml:space="preserve"><value>  SFAdaptorFixer.exe register    安裝或更新 VRNic 排程</value></data>
+  <data name="HelpUnregister" xml:space="preserve"><value>  SFAdaptorFixer.exe unregister  移除 VRNic 排程</value></data>
+  <data name="HelpOn" xml:space="preserve"><value>  SFAdaptorFixer.exe --on        重設並啟用 Valve 8832CU VR 網卡</value></data>
+  <data name="HelpOff" xml:space="preserve"><value>  SFAdaptorFixer.exe --off       安全停用 Valve 8832CU VR 網卡</value></data>
+  <data name="AdminRequired" xml:space="preserve"><value>register 與 unregister 需要系統管理員權限。</value></data>
+  <data name="MenuTitle" xml:space="preserve"><value>VR 網卡控制</value></data>
+  <data name="MenuOn" xml:space="preserve"><value>  1. 啟用 VR 網卡</value></data>
+  <data name="MenuOff" xml:space="preserve"><value>  2. 安全停用 VR 網卡</value></data>
+  <data name="MenuRegister" xml:space="preserve"><value>  3. 註冊排程</value></data>
+  <data name="MenuUnregister" xml:space="preserve"><value>  4. 移除排程</value></data>
+  <data name="MenuExit" xml:space="preserve"><value>  0. 離開</value></data>
+  <data name="MenuPrompt" xml:space="preserve"><value>選擇操作 [0-4]: </value></data>
+  <data name="MenuInvalidSelection" xml:space="preserve"><value>無效的選項。請選擇 0、1、2、3 或 4。</value></data>
+  <data name="PressEnter" xml:space="preserve"><value>&#10;按 Enter 關閉</value></data>
+  <data name="ProgramFilesMissing" xml:space="preserve"><value>找不到 ProgramFiles 系統環境變數。</value></data>
+  <data name="OnTitle" xml:space="preserve"><value>啟動 VR 網卡</value></data>
+  <data name="OffTitle" xml:space="preserve"><value>關閉 VR 網卡</value></data>
+  <data name="ResetAttempt" xml:space="preserve"><value> [{0}/{1}] 正在重設 8832CU 網卡並啟用無線介面...</value></data>
+  <data name="Scanning6GHz" xml:space="preserve"><value>        正在掃描 Steam Frame 的 6GHz 訊號...</value></data>
+  <data name="OffStep1" xml:space="preserve"><value> [1/2] 正在關閉無線網路介面...</value></data>
+  <data name="OffStep2" xml:space="preserve"><value> [2/2] 正在安全停用 8832CU 網卡硬體...</value></data>
+  <data name="OffDeviceMissing" xml:space="preserve"><value> [注意] 找不到 Valve 8832CU 網卡(未插上)，不需要停用。</value></data>
+  <data name="OffSuccess" xml:space="preserve"><value> [成功] 網卡已停用，驅動已卸載。</value></data>
+  <data name="OffPowerSafe" xml:space="preserve"><value> 現在可以放心關閉天花板電燈與電源。</value></data>
+  <data name="OffUnconfirmed" xml:space="preserve"><value> [警告] 停用未確認(狀態：{0})！請勿關燈，先回電腦確認。</value></data>
+  <data name="OnSuccess" xml:space="preserve"><value> [成功] 網卡已啟動，已偵測到 6GHz 訊號，可以開始 Steam Frame 串流。</value></data>
+  <data name="OnNo6GHz" xml:space="preserve"><value> [失敗] 網卡已啟動，但重設 {0} 次仍掃不到任何 6GHz 訊號。</value></data>
+  <data name="OnNo6GHzTip1" xml:space="preserve"><value>        1. 確認頭顯已開機(頭顯的串流 AP 只在開機時廣播)</value></data>
+  <data name="OnNo6GHzTip2" xml:space="preserve"><value>        2. 把網卡從 Hub 拔掉 10 秒再插回(完全斷電重設)，然後再執行一次</value></data>
+  <data name="OnNotPresent" xml:space="preserve"><value> [注意] 已設為啟用，但偵測不到網卡：請確認 Hub 外接電源已開啟。</value></data>
+  <data name="OnWillRecover" xml:space="preserve"><value>        電源恢復後網卡會自動上線，不需要再執行一次。</value></data>
+  <data name="OnDeviceMissing" xml:space="preserve"><value> [失敗] 找不到 Valve 8832CU 網卡({0})：請確認網卡已插上電腦。</value></data>
+  <data name="OnStateUnexpected" xml:space="preserve"><value> [失敗] 網卡狀態異常：{0}</value></data>
+  <data name="ConsoleUserMismatch" xml:space="preserve"><value>目前以 {0} 身分執行，但登入桌面的是 {1}。請讓 {1} 本身具有系統管理員權限後再執行(UAC 不要改用其他帳號)。</value></data>
+  <data name="RegisterDeviceMissing" xml:space="preserve"><value>[注意] 目前找不到 Valve 8832CU 網卡，仍會完成註冊；執行 --on 或 --off 時會自動尋找。</value></data>
+  <data name="OnTaskDescription" xml:space="preserve"><value>啟用 Valve 8832CU VR 網卡(免 UAC)</value></data>
+  <data name="OffTaskDescription" xml:space="preserve"><value>停用 Valve 8832CU VR 網卡，關燈斷電前執行(免 UAC)</value></data>
+  <data name="TaskRegistered" xml:space="preserve"><value>[排程] {0} 已註冊(最高權限)</value></data>
+  <data name="RegisterSuccess" xml:space="preserve"><value>完成。VRNicOn 與 VRNicOff 排程已註冊，不會再跳出 UAC。</value></data>
+  <data name="TaskRunHint" xml:space="preserve"><value>可使用 schtasks /run /tn "VRNicOn" 或 schtasks /run /tn "VRNicOff" 啟動排程。</value></data>
+  <data name="LogPath" xml:space="preserve"><value>執行記錄：{0}</value></data>
+  <data name="ProgramInstalled" xml:space="preserve"><value>[程式] {0}</value></data>
+  <data name="ProgramAlreadyInstalled" xml:space="preserve"><value>[略過複製] 程式已位於 {0}</value></data>
+  <data name="TaskNotRegistered" xml:space="preserve"><value>[排程] {0} 尚未註冊，略過移除</value></data>
+  <data name="TaskRemoved" xml:space="preserve"><value>[排程] {0} 已移除</value></data>
+  <data name="RegisterTaskOperation" xml:space="preserve"><value>註冊排程 {0}</value></data>
+  <data name="QueryTaskOperation" xml:space="preserve"><value>查詢排程 {0}</value></data>
+  <data name="UnregisterTaskOperation" xml:space="preserve"><value>移除排程 {0}</value></data>
+  <data name="CommandExitCode" xml:space="preserve"><value>[注意] {0} {1} 回傳 {2}。</value></data>
+  <data name="CannotStart" xml:space="preserve"><value>無法啟動 {0}。</value></data>
+  <data name="CannotExecute" xml:space="preserve"><value>無法執行 {0}：{1}</value></data>
+  <data name="CommandTimeout" xml:space="preserve"><value>{0} 執行超過 {1:0} 秒。</value></data>
+  <data name="OperationFailedCode" xml:space="preserve"><value>{0}失敗，結束代碼為 {1}。</value></data>
+  <data name="OperationFailedDetails" xml:space="preserve"><value>{0}失敗：{1}</value></data>
+</root>
