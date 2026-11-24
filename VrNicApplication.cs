@@ -32,7 +32,7 @@ public static class VrNicApplication {
             return await RunInteractiveAsync();
         }
 
-        if (!IsAdministrator()) {
+        if (!IsAdministrator() && parsed.Mode != CommandMode.Status) {
             if (parsed.Mode is CommandMode.TurnOn or CommandMode.TurnOff) {
                 try {
                     if (await ScheduledTaskDelegator.TryRunAsync(parsed.Mode)) {
@@ -68,6 +68,8 @@ public static class VrNicApplication {
                     return await new NicController(logger).TurnOnAsync();
                 case CommandMode.TurnOff:
                     return await new NicController(logger).TurnOffAsync();
+                case CommandMode.Status:
+                    return await new NicController(logger).InspectStatusAsync();
             }
         } catch (Exception ex) {
             ConsoleOutput.WriteError(Localization.Format("Failure", ex.Message));
@@ -108,6 +110,7 @@ public static class VrNicApplication {
             ConsoleOutput.HorizontalRule();
             Console.WriteLine(Localization.Get("MenuOn"));
             Console.WriteLine(Localization.Get("MenuOff"));
+            Console.WriteLine(Localization.Get("MenuStatus"));
             Console.WriteLine(Localization.Get("MenuRegister"));
             Console.WriteLine(Localization.Get("MenuUnregister"));
             Console.WriteLine(Localization.Get("MenuExit"));
@@ -130,6 +133,7 @@ public static class VrNicApplication {
         Console.WriteLine(Localization.Get("HelpUnregister"));
         Console.WriteLine(Localization.Get("HelpOn"));
         Console.WriteLine(Localization.Get("HelpOff"));
+        Console.WriteLine(Localization.Get("HelpStatus"));
         Console.WriteLine();
         Console.WriteLine(Localization.Get("AdminRequired"));
     }

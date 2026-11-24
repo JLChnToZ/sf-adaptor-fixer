@@ -5,30 +5,40 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
   <data name="WindowsOnly" xml:space="preserve"><value>このアプリケーションは Windows 専用です。</value></data>
-  <data name="InvalidArguments" xml:space="preserve"><value>引数が無効です。register、unregister、--on、または --off を使用してください。</value></data>
   <data name="DelegatingToTask" xml:space="preserve"><value>[タスク] 一致する登録済みタスクを検出しました。UAC なしで開始します。</value></data>
   <data name="UnregisterSuccess" xml:space="preserve"><value>完了しました。VRNicOn と VRNicOff のタスクを削除しました。アプリケーション、ログ、バックアップファイルは保持されます。</value></data>
   <data name="Failure" xml:space="preserve"><value>[失敗] {0}</value></data>
   <data name="ProcessPathMissing" xml:space="preserve"><value>現在の実行ファイルのパスを特定できませんでした。</value></data>
   <data name="ElevationFailed" xml:space="preserve"><value>[失敗] 管理者権限が必要です。UAC がキャンセルされたか、昇格に失敗しました: {0}</value></data>
+  <data name="InvalidArguments" xml:space="preserve"><value>引数が無効です。register、unregister、on、off、または status を使用してください。</value></data>
   <data name="HelpHeader" xml:space="preserve"><value>使い方:</value></data>
   <data name="HelpRegister" xml:space="preserve"><value>  SFAdaptorFixer.exe register    VRNic のタスクをインストールまたは更新</value></data>
   <data name="HelpUnregister" xml:space="preserve"><value>  SFAdaptorFixer.exe unregister  VRNic のタスクを削除</value></data>
-  <data name="HelpOn" xml:space="preserve"><value>  SFAdaptorFixer.exe --on        Valve 8832CU VR アダプターをリセットして有効化</value></data>
-  <data name="HelpOff" xml:space="preserve"><value>  SFAdaptorFixer.exe --off       Valve 8832CU VR アダプターを安全に無効化</value></data>
+  <data name="HelpOn" xml:space="preserve"><value>  SFAdaptorFixer.exe on          Valve 8832CU VR アダプターをリセットして有効化</value></data>
+  <data name="HelpOff" xml:space="preserve"><value>  SFAdaptorFixer.exe off         Valve 8832CU VR アダプターを安全に無効化</value></data>
+  <data name="HelpStatus" xml:space="preserve"><value>  SFAdaptorFixer.exe status      Valve 8832CU VR アダプターの状態を確認</value></data>
   <data name="AdminRequired" xml:space="preserve"><value>register と unregister には管理者権限が必要です。</value></data>
   <data name="MenuTitle" xml:space="preserve"><value>VR アダプター コントロール</value></data>
   <data name="MenuOn" xml:space="preserve"><value>  1. VR アダプターを有効化</value></data>
   <data name="MenuOff" xml:space="preserve"><value>  2. VR アダプターを安全に無効化</value></data>
-  <data name="MenuRegister" xml:space="preserve"><value>  3. タスクを登録</value></data>
-  <data name="MenuUnregister" xml:space="preserve"><value>  4. タスクを削除</value></data>
+  <data name="MenuStatus" xml:space="preserve"><value>  3. VR アダプターの状態を確認</value></data>
+  <data name="MenuRegister" xml:space="preserve"><value>  4. タスクを登録</value></data>
+  <data name="MenuUnregister" xml:space="preserve"><value>  5. タスクを削除</value></data>
   <data name="MenuExit" xml:space="preserve"><value>  0. 終了</value></data>
-  <data name="MenuPrompt" xml:space="preserve"><value>操作を選択してください [0-4]: </value></data>
-  <data name="MenuInvalidSelection" xml:space="preserve"><value>無効な選択です。0、1、2、3、4 のいずれかを入力してください。</value></data>
+  <data name="MenuPrompt" xml:space="preserve"><value>操作を選択してください [0-5]: </value></data>
+  <data name="MenuInvalidSelection" xml:space="preserve"><value>無効な選択です。0、1、2、3、4、5 のいずれかを入力してください。</value></data>
   <data name="PressEnter" xml:space="preserve"><value>&#10;Enter キーを押して閉じる</value></data>
   <data name="ProgramFilesMissing" xml:space="preserve"><value>ProgramFiles 環境変数が見つかりません。</value></data>
   <data name="OnTitle" xml:space="preserve"><value>VR アダプターを有効化</value></data>
   <data name="OffTitle" xml:space="preserve"><value>VR アダプターを無効化</value></data>
+  <data name="StatusTitle" xml:space="preserve"><value>VR アダプターの状態</value></data>
+  <data name="StatusDevice" xml:space="preserve"><value>デバイス: Valve 8832CU ({0})</value></data>
+  <data name="StatusResult" xml:space="preserve"><value>現在の状態: {0}</value></data>
+  <data name="StatusEnabled" xml:space="preserve"><value>有効</value></data>
+  <data name="StatusDisabled" xml:space="preserve"><value>無効</value></data>
+  <data name="StatusNotPresent" xml:space="preserve"><value>検出されていません</value></data>
+  <data name="StatusNotFound" xml:space="preserve"><value>デバイスが見つかりません</value></data>
+  <data name="StatusUnexpected" xml:space="preserve"><value>予期しない状態 ({0})</value></data>
   <data name="ResetAttempt" xml:space="preserve"><value> [{0}/{1}] 8832CU アダプターをリセットし、ワイヤレス インターフェイスを有効化しています...</value></data>
   <data name="Scanning6GHz" xml:space="preserve"><value>        Steam Frame の 6GHz 信号をスキャンしています...</value></data>
   <data name="OffStep1" xml:space="preserve"><value> [1/2] ワイヤレス インターフェイスを無効化しています...</value></data>
@@ -46,7 +56,7 @@
   <data name="OnDeviceMissing" xml:space="preserve"><value> [失敗] Valve 8832CU アダプター（{0}）が見つかりません。接続を確認してください。</value></data>
   <data name="OnStateUnexpected" xml:space="preserve"><value> [失敗] 予期しないアダプター状態: {0}</value></data>
   <data name="ConsoleUserMismatch" xml:space="preserve"><value>現在のプロセスは {0} で実行されていますが、デスクトップのユーザーは {1} です。{1} に管理者権限を付与し、アカウントを切り替えずに再実行してください。</value></data>
-  <data name="RegisterDeviceMissing" xml:space="preserve"><value>[通知] Valve 8832CU アダプターが見つかりませんが、登録は続行します。--on または --off の実行時に自動検出します。</value></data>
+  <data name="RegisterDeviceMissing" xml:space="preserve"><value>[通知] Valve 8832CU アダプターが見つかりませんが、登録は続行します。on または off の実行時に自動検出します。</value></data>
   <data name="OnTaskDescription" xml:space="preserve"><value>Valve 8832CU VR アダプターを有効化（UAC なし）</value></data>
   <data name="OffTaskDescription" xml:space="preserve"><value>電源切断前に Valve 8832CU VR アダプターを無効化（UAC なし）</value></data>
   <data name="TaskRegistered" xml:space="preserve"><value>[タスク] {0} を登録しました（最高権限）</value></data>

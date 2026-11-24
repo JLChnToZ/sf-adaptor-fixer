@@ -8,8 +8,8 @@ namespace SFAdaptorFixer;
 public static class ScheduledTaskDelegator {
     public static async Task<bool> TryRunAsync(CommandMode mode) {
         var (taskName, arguments) = mode switch {
-            CommandMode.TurnOn => (AppPaths.OnTaskName, "--on"),
-            CommandMode.TurnOff => (AppPaths.OffTaskName, "--off"),
+            CommandMode.TurnOn => (AppPaths.OnTaskName, "on"),
+            CommandMode.TurnOff => (AppPaths.OffTaskName, "off"),
             _ => throw new ArgumentOutOfRangeException(nameof(mode), mode, null)
         };
 

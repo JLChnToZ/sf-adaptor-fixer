@@ -12,10 +12,11 @@ VR network adapter.
   `%ProgramFiles%\VRNic`, and register or update `VRNicOn` / `VRNicOff`.
 - `SFAdaptorFixer.exe unregister`: remove `VRNicOn` / `VRNicOff` while keeping
   the installed executable, logs, and backup files.
-- `SFAdaptorFixer.exe --on`: reset the adapter, enable it, and retry until a
+- `SFAdaptorFixer.exe on`: reset the adapter, enable it, and retry until a
   6 GHz BSS is visible.
-- `SFAdaptorFixer.exe --off`: disable the wireless interface and PnP device,
+- `SFAdaptorFixer.exe off`: disable the wireless interface and PnP device,
   then verify that it is safe to remove power.
+- `SFAdaptorFixer.exe status`: inspect the adapter state without changing it.
 
 The scheduled tasks run the installed executable directly. PowerShell and
 desktop batch launchers are not required.
@@ -65,6 +66,6 @@ workflow. The workflow creates the corresponding `v`-prefixed tag and applies
 the version to the published binaries' file, assembly, and product metadata.
 
 `register` and `unregister` affect scheduled tasks and require administrator
-approval. `--on` and `--off` can disable network connectivity, so integration
+approval. `on` and `off` can disable network connectivity, so integration
 validation must be performed on the intended Windows computer with the Valve
 adapter connected.

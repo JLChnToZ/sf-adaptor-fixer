@@ -5,30 +5,40 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
   <data name="WindowsOnly" xml:space="preserve"><value>此应用程序仅支持 Windows。</value></data>
-  <data name="InvalidArguments" xml:space="preserve"><value>无效的参数。请使用 register、unregister、--on 或 --off。</value></data>
   <data name="DelegatingToTask" xml:space="preserve"><value>[计划任务] 已找到匹配的已注册任务，将不经 UAC 直接启动。</value></data>
   <data name="UnregisterSuccess" xml:space="preserve"><value>完成。VRNicOn 和 VRNicOff 计划任务已移除；程序、日志和备份文件均保留。</value></data>
   <data name="Failure" xml:space="preserve"><value>[失败] {0}</value></data>
   <data name="ProcessPathMissing" xml:space="preserve"><value>找不到当前可执行文件路径。</value></data>
   <data name="ElevationFailed" xml:space="preserve"><value>[失败] 需要管理员权限，UAC 已取消或无法提权：{0}</value></data>
+  <data name="InvalidArguments" xml:space="preserve"><value>参数无效。请使用 register、unregister、on、off 或 status。</value></data>
   <data name="HelpHeader" xml:space="preserve"><value>用法:</value></data>
   <data name="HelpRegister" xml:space="preserve"><value>  SFAdaptorFixer.exe register    安装或更新 VRNic 计划任务</value></data>
   <data name="HelpUnregister" xml:space="preserve"><value>  SFAdaptorFixer.exe unregister  移除 VRNic 计划任务</value></data>
-  <data name="HelpOn" xml:space="preserve"><value>  SFAdaptorFixer.exe --on        重置并启用 Valve 8832CU VR 网卡</value></data>
-  <data name="HelpOff" xml:space="preserve"><value>  SFAdaptorFixer.exe --off       安全停用 Valve 8832CU VR 网卡</value></data>
+  <data name="HelpOn" xml:space="preserve"><value>  SFAdaptorFixer.exe on          重置并启用 Valve 8832CU VR 网卡</value></data>
+  <data name="HelpOff" xml:space="preserve"><value>  SFAdaptorFixer.exe off         安全停用 Valve 8832CU VR 网卡</value></data>
+  <data name="HelpStatus" xml:space="preserve"><value>  SFAdaptorFixer.exe status      查看 Valve 8832CU VR 网卡当前状态</value></data>
   <data name="AdminRequired" xml:space="preserve"><value>register 和 unregister 需要管理员权限。</value></data>
   <data name="MenuTitle" xml:space="preserve"><value>VR 网卡控制</value></data>
   <data name="MenuOn" xml:space="preserve"><value>  1. 启用 VR 网卡</value></data>
   <data name="MenuOff" xml:space="preserve"><value>  2. 安全停用 VR 网卡</value></data>
-  <data name="MenuRegister" xml:space="preserve"><value>  3. 注册计划任务</value></data>
-  <data name="MenuUnregister" xml:space="preserve"><value>  4. 移除计划任务</value></data>
+  <data name="MenuStatus" xml:space="preserve"><value>  3. 查看 VR 网卡当前状态</value></data>
+  <data name="MenuRegister" xml:space="preserve"><value>  4. 注册计划任务</value></data>
+  <data name="MenuUnregister" xml:space="preserve"><value>  5. 移除计划任务</value></data>
   <data name="MenuExit" xml:space="preserve"><value>  0. 退出</value></data>
-  <data name="MenuPrompt" xml:space="preserve"><value>选择操作 [0-4]: </value></data>
-  <data name="MenuInvalidSelection" xml:space="preserve"><value>选择无效。请选择 0、1、2、3 或 4。</value></data>
+  <data name="MenuPrompt" xml:space="preserve"><value>选择操作 [0-5]: </value></data>
+  <data name="MenuInvalidSelection" xml:space="preserve"><value>选择无效。请选择 0、1、2、3、4 或 5。</value></data>
   <data name="PressEnter" xml:space="preserve"><value>&#10;按 Enter 关闭</value></data>
   <data name="ProgramFilesMissing" xml:space="preserve"><value>找不到 ProgramFiles 系统环境变量。</value></data>
   <data name="OnTitle" xml:space="preserve"><value>启用 VR 网卡</value></data>
   <data name="OffTitle" xml:space="preserve"><value>关闭 VR 网卡</value></data>
+  <data name="StatusTitle" xml:space="preserve"><value>VR 网卡当前状态</value></data>
+  <data name="StatusDevice" xml:space="preserve"><value>设备：Valve 8832CU ({0})</value></data>
+  <data name="StatusResult" xml:space="preserve"><value>当前状态：{0}</value></data>
+  <data name="StatusEnabled" xml:space="preserve"><value>已启用</value></data>
+  <data name="StatusDisabled" xml:space="preserve"><value>已停用</value></data>
+  <data name="StatusNotPresent" xml:space="preserve"><value>不在系统中</value></data>
+  <data name="StatusNotFound" xml:space="preserve"><value>未找到设备</value></data>
+  <data name="StatusUnexpected" xml:space="preserve"><value>异常 ({0})</value></data>
   <data name="ResetAttempt" xml:space="preserve"><value> [{0}/{1}] 正在重置 8832CU 网卡并启用无线接口...</value></data>
   <data name="Scanning6GHz" xml:space="preserve"><value>        正在扫描 Steam Frame 的 6GHz 信号...</value></data>
   <data name="OffStep1" xml:space="preserve"><value> [1/2] 正在关闭无线网络接口...</value></data>
@@ -46,7 +56,7 @@
   <data name="OnDeviceMissing" xml:space="preserve"><value> [失败] 找不到 Valve 8832CU 网卡（{0}）：请确认网卡已连接到电脑。</value></data>
   <data name="OnStateUnexpected" xml:space="preserve"><value> [失败] 网卡状态异常：{0}</value></data>
   <data name="ConsoleUserMismatch" xml:space="preserve"><value>当前以 {0} 身份运行，但登录桌面的是 {1}。请赋予 {1} 管理员权限并再次运行（UAC 中不要切换其他账户）。</value></data>
-  <data name="RegisterDeviceMissing" xml:space="preserve"><value>[注意] 当前找不到 Valve 8832CU 网卡，仍会完成注册；运行 --on 或 --off 时会自动查找。</value></data>
+  <data name="RegisterDeviceMissing" xml:space="preserve"><value>[注意] 当前找不到 Valve 8832CU 网卡，仍会完成注册；运行 on 或 off 时会自动查找。</value></data>
   <data name="OnTaskDescription" xml:space="preserve"><value>启用 Valve 8832CU VR 网卡（免 UAC）</value></data>
   <data name="OffTaskDescription" xml:space="preserve"><value>关灯断电前停用 Valve 8832CU VR 网卡（免 UAC）</value></data>
   <data name="TaskRegistered" xml:space="preserve"><value>[计划任务] {0} 已注册（最高权限）</value></data>

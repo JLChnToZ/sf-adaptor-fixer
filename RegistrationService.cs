@@ -20,8 +20,8 @@ public static class RegistrationService {
         InstallExecutable();
 
         var definitions = new TaskDefinition[] {
-            new(AppPaths.OnTaskName, "--on", Localization.Get("OnTaskDescription")),
-            new(AppPaths.OffTaskName, "--off", Localization.Get("OffTaskDescription"))
+            new(AppPaths.OnTaskName, "on", Localization.Get("OnTaskDescription")),
+            new(AppPaths.OffTaskName, "off", Localization.Get("OffTaskDescription"))
         };
 
         foreach (var definition in definitions) {

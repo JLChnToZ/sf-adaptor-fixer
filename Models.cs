@@ -6,6 +6,7 @@ public enum CommandMode : byte {
     Unregister,
     TurnOn,
     TurnOff,
+    Status,
 }
 
 public sealed record ApplicationArguments(CommandMode Mode);
@@ -15,16 +16,18 @@ public static class ApplicationArgumentParser {
         [] => new ApplicationArguments(CommandMode.Interactive),
         ["register"] => new ApplicationArguments(CommandMode.Register),
         ["unregister"] => new ApplicationArguments(CommandMode.Unregister),
-        ["--on"] => new ApplicationArguments(CommandMode.TurnOn),
-        ["--off"] => new ApplicationArguments(CommandMode.TurnOff),
+        ["on"] => new ApplicationArguments(CommandMode.TurnOn),
+        ["off"] => new ApplicationArguments(CommandMode.TurnOff),
+        ["status"] => new ApplicationArguments(CommandMode.Status),
         _ => null
     };
 
     public static CommandMode? ParseInteractiveSelection(ConsoleKey selection) => selection switch {
         ConsoleKey.D1 or ConsoleKey.NumPad1 => CommandMode.TurnOn,
         ConsoleKey.D2 or ConsoleKey.NumPad2 => CommandMode.TurnOff,
-        ConsoleKey.D3 or ConsoleKey.NumPad3 => CommandMode.Register,
-        ConsoleKey.D4 or ConsoleKey.NumPad4 => CommandMode.Unregister,
+        ConsoleKey.D3 or ConsoleKey.NumPad3 => CommandMode.Status,
+        ConsoleKey.D4 or ConsoleKey.NumPad4 => CommandMode.Register,
+        ConsoleKey.D5 or ConsoleKey.NumPad5 => CommandMode.Unregister,
         ConsoleKey.D0 or ConsoleKey.NumPad0 => CommandMode.Interactive,
         _ => null
     };

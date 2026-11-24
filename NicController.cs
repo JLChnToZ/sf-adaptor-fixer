@@ -5,6 +5,29 @@ namespace SFAdaptorFixer;
 [SupportedOSPlatform("windows")]
 public sealed class NicController(TextLogger logger) {
 
+    public async Task<int> InspectStatusAsync() {
+        Console.Title = Localization.Get("StatusTitle");
+        ConsoleOutput.HorizontalRule();
+
+        var device = NicDeviceService.FindDevice();
+        var state = device is null ? new NicState(NicStateKind.NotFound, "NotFound") : device.State;
+        logger.Write($"STATUS -> {state.DisplayName}");
+
+        Console.WriteLine(Localization.Format("StatusDevice", NicDeviceService.ValveVidPidPrefix));
+        var label = state.Kind switch {
+            NicStateKind.Enabled => Localization.Get("StatusEnabled"),
+            NicStateKind.Disabled => Localization.Get("StatusDisabled"),
+            NicStateKind.NotPresent => Localization.Get("StatusNotPresent"),
+            NicStateKind.NotFound => Localization.Get("StatusNotFound"),
+            _ => Localization.Format("StatusUnexpected", state.DisplayName),
+        };
+
+        Console.WriteLine(Localization.Format("StatusResult", label));
+        ConsoleOutput.HorizontalRule();
+        await Task.CompletedTask;
+        return state.Kind is NicStateKind.Enabled or NicStateKind.Disabled or NicStateKind.NotPresent or NicStateKind.NotFound ? 0 : 1;
+    }
+
     public async Task<int> TurnOnAsync() {
         Console.Title = Localization.Get("OnTitle");
         ConsoleOutput.HorizontalRule();

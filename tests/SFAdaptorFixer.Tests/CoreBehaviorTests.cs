@@ -57,8 +57,9 @@ public sealed class CoreBehaviorTests {
     [Theory]
     [InlineData(ConsoleKey.D1, CommandMode.TurnOn)]
     [InlineData(ConsoleKey.D2, CommandMode.TurnOff)]
-    [InlineData(ConsoleKey.D3, CommandMode.Register)]
-    [InlineData(ConsoleKey.D4, CommandMode.Unregister)]
+    [InlineData(ConsoleKey.D3, CommandMode.Status)]
+    [InlineData(ConsoleKey.D4, CommandMode.Register)]
+    [InlineData(ConsoleKey.D5, CommandMode.Unregister)]
     public void ParseInteractiveSelection_ReturnsRequestedCommand(ConsoleKey selection, CommandMode expected) {
         var result = ApplicationArgumentParser.ParseInteractiveSelection(selection);
         Assert.Equal(expected, result);
@@ -77,8 +78,9 @@ public sealed class CoreBehaviorTests {
     [Theory]
     [InlineData("register", CommandMode.Register)]
     [InlineData("unregister", CommandMode.Unregister)]
-    [InlineData("--on", CommandMode.TurnOn)]
-    [InlineData("--off", CommandMode.TurnOff)]
+    [InlineData("on", CommandMode.TurnOn)]
+    [InlineData("off", CommandMode.TurnOff)]
+    [InlineData("status", CommandMode.Status)]
     public void Parse_SupportedArgument_SelectsMode(string argument, CommandMode expected) {
         var result = ApplicationArgumentParser.Parse([argument]);
 
@@ -87,7 +89,6 @@ public sealed class CoreBehaviorTests {
     }
 
     [Theory]
-    [InlineData("on")]
     [InlineData("Register")]
     [InlineData("--unknown")]
     [InlineData("")]
@@ -130,7 +131,7 @@ public sealed class CoreBehaviorTests {
     [Fact]
     public void BuildTaskDocument_UsesHighestPrivilegeAndFiveMinuteLimit() {
         var document = TaskSchedulerService.BuildTaskDocument(
-            "--off",
+            "off",
             "Test task",
             @"DESKTOP\User");
         var ns = document.Root!.Name.Namespace;
@@ -140,7 +141,7 @@ public sealed class CoreBehaviorTests {
         Assert.Equal("InteractiveToken", document.Descendants(ns + "LogonType").Single().Value);
         Assert.Equal("PT5M", document.Descendants(ns + "ExecutionTimeLimit").Single().Value);
         Assert.Equal("IgnoreNew", document.Descendants(ns + "MultipleInstancesPolicy").Single().Value);
-        Assert.Equal("--off", document.Descendants(ns + "Arguments").Single().Value);
+        Assert.Equal("off", document.Descendants(ns + "Arguments").Single().Value);
         Assert.Equal(AppPaths.InstalledExecutable, document.Descendants(ns + "Command").Single().Value);
     }
 
@@ -149,7 +150,7 @@ public sealed class CoreBehaviorTests {
         var path = Path.Combine(Path.GetTempPath(), $"vrnic-task-{Guid.NewGuid():N}.xml");
         try {
             TaskSchedulerService.SaveTaskDocument(
-                TaskSchedulerService.BuildTaskDocument("--on", "Test task", @"DESKTOP\User"),
+                TaskSchedulerService.BuildTaskDocument("on", "Test task", @"DESKTOP\User"),
                 path);
 
             var bytes = File.ReadAllBytes(path);
@@ -166,18 +167,18 @@ public sealed class CoreBehaviorTests {
 
     [Fact]
     public void MatchesRegisteredAction_AcceptsMatchingExecutableAndArgument() {
-        var xml = BuildTaskXml(@"C:\Program Files\VRNic\SFAdaptorFixer.exe", "--on");
+        var xml = BuildTaskXml(@"C:\Program Files\VRNic\SFAdaptorFixer.exe", "on");
 
         Assert.True(ScheduledTaskDelegator.MatchesRegisteredAction(
             xml,
             @"c:\program files\vrnic\sfadaptorfixer.exe",
-            "--on"));
+            "on"));
     }
 
     [Theory]
-    [InlineData(@"C:\Other\SFAdaptorFixer.exe", "--on")]
-    [InlineData(@"C:\Program Files\VRNic\SFAdaptorFixer.exe", "--off")]
-    [InlineData(@"", "--on")]
+    [InlineData(@"C:\Other\SFAdaptorFixer.exe", "on")]
+    [InlineData(@"C:\Program Files\VRNic\SFAdaptorFixer.exe", "off")]
+    [InlineData(@"", "on")]
     public void MatchesRegisteredAction_RejectsMismatchedTask(
         string command,
         string arguments) {
@@ -186,7 +187,7 @@ public sealed class CoreBehaviorTests {
         Assert.False(ScheduledTaskDelegator.MatchesRegisteredAction(
             xml,
             @"C:\Program Files\VRNic\SFAdaptorFixer.exe",
-            "--on"));
+            "on"));
     }
 
     [Fact]
@@ -194,7 +195,7 @@ public sealed class CoreBehaviorTests {
         Assert.False(ScheduledTaskDelegator.MatchesRegisteredAction(
             "<Task",
             @"C:\Program Files\VRNic\SFAdaptorFixer.exe",
-            "--on"));
+            "on"));
     }
 
     [Fact]
@@ -202,10 +203,10 @@ public sealed class CoreBehaviorTests {
         Assert.False(ScheduledTaskDelegator.MatchesRegisteredAction(
             BuildTaskXml(
                 @"C:\Program Files\VRNic\SFAdaptorFixer.exe",
-                "--on",
+                "on",
                 "Limited"),
             @"C:\Program Files\VRNic\SFAdaptorFixer.exe",
-            "--on"));
+            "on"));
     }
 
     private static string BuildTaskXml(
