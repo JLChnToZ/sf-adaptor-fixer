@@ -7,6 +7,7 @@ public enum CommandMode : byte {
     TurnOn,
     TurnOff,
     Status,
+    Exit,
 }
 
 public sealed record ApplicationArguments(CommandMode Mode);
@@ -38,7 +39,7 @@ public static class ApplicationArgumentParser {
         ConsoleKey.D3 or ConsoleKey.NumPad3 => CommandMode.Status,
         ConsoleKey.D4 or ConsoleKey.NumPad4 => CommandMode.Register,
         ConsoleKey.D5 or ConsoleKey.NumPad5 => CommandMode.Unregister,
-        ConsoleKey.D0 or ConsoleKey.NumPad0 => CommandMode.Interactive,
+        ConsoleKey.D0 or ConsoleKey.NumPad0 => CommandMode.Exit,
         _ => null
     };
 }

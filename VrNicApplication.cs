@@ -126,6 +126,8 @@ public static class VrNicApplication {
                 continue;
             }
 
+            if (selectedMode == CommandMode.Exit) return 0;
+
             return await RunAsync(selectedMode);
         }
     }
