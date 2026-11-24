@@ -24,54 +24,57 @@ public static class VrNicApplication {
             return 2;
         }
 
-        try {
-            if (parsed.Mode == CommandMode.Interactive) return await RunInteractiveAsync();
+        if (parsed.Mode == CommandMode.Interactive) {
+            if (Console.IsInputRedirected) {
+                PrintHelp();
+                return 2;
+            }
+            return await RunInteractiveAsync();
+        }
 
-            if (!IsAdministrator()) {
-                if (parsed.Mode is CommandMode.TurnOn or CommandMode.TurnOff) {
-                    using var preflightRunner = new WindowsCommandRunner();
-                    var delegator = new ScheduledTaskDelegator(preflightRunner);
-                    try {
-                        if (await delegator.TryRunAsync(parsed.Mode)) {
-                            ConsoleOutput.WriteMuted(Localization.Get("DelegatingToTask"));
-                            return 0;
-                        }
-                    } catch (Exception ex) when (ex is InvalidOperationException or TimeoutException) {
-                        // A task preflight failure falls back to the existing UAC path.
+        if (!IsAdministrator()) {
+            if (parsed.Mode is CommandMode.TurnOn or CommandMode.TurnOff) {
+                try {
+                    if (await ScheduledTaskDelegator.TryRunAsync(parsed.Mode)) {
+                        ConsoleOutput.WriteMuted(Localization.Get("DelegatingToTask"));
+                        return 0;
                     }
+                } catch (InvalidOperationException) {
+                } catch (TimeoutException) {
                 }
-
-                return RelaunchAsAdministrator(args);
             }
 
-            using var runner = new WindowsCommandRunner();
-            var devices = new NicDeviceService(runner);
-            var wlan = new WlanScanner();
+            return RelaunchAsAdministrator(args);
+        }
+
+        return await RunAsync(parsed.Mode);
+    }
+
+    public static async Task<int> RunAsync(CommandMode mode) {
+        try {
+            var runner = new WindowsCommandRunner();
             var logger = new TextLogger(AppPaths.LogFile);
-
-            if (parsed.Mode == CommandMode.Register) {
-                var registration = new RegistrationService(devices, runner);
-                await registration.RegisterAsync();
-                return 0;
+            switch (mode) {
+                case CommandMode.Register:
+                    await RegistrationService.RegisterAsync();
+                    return 0;
+                case CommandMode.Unregister:
+                    await TaskSchedulerService.UnregisterAsync(AppPaths.OnTaskName);
+                    await TaskSchedulerService.UnregisterAsync(AppPaths.OffTaskName);
+                    ConsoleOutput.WriteSuccess(Localization.Get("UnregisterSuccess"));
+                    ConsoleOutput.PauseForInput();
+                    return 0;
+                case CommandMode.TurnOn:
+                    return await new NicController(logger).TurnOnAsync();
+                case CommandMode.TurnOff:
+                    return await new NicController(logger).TurnOffAsync();
             }
-
-            if (parsed.Mode == CommandMode.Unregister) {
-                var scheduler = new TaskSchedulerService(runner);
-                await scheduler.UnregisterAsync(AppPaths.OnTaskName);
-                await scheduler.UnregisterAsync(AppPaths.OffTaskName);
-                ConsoleOutput.WriteSuccess(Localization.Get("UnregisterSuccess"));
-                ConsoleOutput.PauseForInput();
-                return 0;
-            }
-
-            var controller = new NicController(devices, logger);
-            return parsed.Mode == CommandMode.TurnOn ? await controller.TurnOnAsync() : await controller.TurnOffAsync();
         } catch (Exception ex) {
             ConsoleOutput.WriteError(Localization.Format("Failure", ex.Message));
-            if (parsed.Mode is CommandMode.Register or CommandMode.Unregister)
+            if (mode is CommandMode.Register or CommandMode.Unregister)
                 ConsoleOutput.PauseForInput();
-            return 1;
         }
+        return 1;
     }
 
     private static bool IsAdministrator() {
@@ -80,7 +83,7 @@ public static class VrNicApplication {
         return principal.IsInRole(WindowsBuiltInRole.Administrator);
     }
 
-    private static int RelaunchAsAdministrator(string[] args) {
+    private static int RelaunchAsAdministrator(ReadOnlySpan<string> args) {
         try {
             var startInfo = new ProcessStartInfo(Environment.ProcessPath ?? throw new InvalidOperationException(Localization.Get("ProcessPathMissing"))) {
                 UseShellExecute = true,
@@ -111,15 +114,13 @@ public static class VrNicApplication {
             Console.WriteLine();
             Console.Write(Localization.Get("MenuPrompt"));
 
-            var selection = Console.ReadLine();
-            var selectedArguments = ApplicationArgumentParser.ParseInteractiveSelection(selection);
-            if (selectedArguments is null) {
+            if (ApplicationArgumentParser.ParseInteractiveSelection(Console.ReadKey().Key) is not { } selectedMode) {
                 ConsoleOutput.WriteWarning(Localization.Get("MenuInvalidSelection"));
                 await Task.Delay(TimeSpan.FromSeconds(1));
                 continue;
             }
-            if (selectedArguments.Length == 0) return 0;
-            return await RunAsync(selectedArguments);
+
+            return await RunAsync(selectedMode);
         }
     }
 

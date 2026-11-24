@@ -6,19 +6,19 @@ using System.Xml.Linq;
 namespace SFAdaptorFixer;
 
 [SupportedOSPlatform("windows")]
-public sealed class TaskSchedulerService(WindowsCommandRunner commandRunner) {
+public static class TaskSchedulerService {
     private static readonly Encoding Encoding = Encoding.Unicode;
     private static readonly XNamespace TaskNamespace = "http://schemas.microsoft.com/windows/2004/02/mit/task";
     private const string TRUE = "true";
     private const string FALSE = "false";
 
-    public async Task RegisterAsync(string taskName, string arguments, string description, string userName) {
+    public static async Task RegisterAsync(string taskName, string arguments, string description, string userName) {
         var xmlPath = Path.Combine(Path.GetTempPath(), $"VRNic-{Guid.NewGuid():N}.xml");
         try {
             var document = BuildTaskDocument(arguments, description, userName);
             SaveTaskDocument(document, xmlPath);
 
-            _ = await commandRunner.RunRequiredAsync(
+            _ = await WindowsCommandRunner.RunRequiredAsync(
                 Path.Combine(Environment.SystemDirectory, "schtasks.exe"),
                 ["/Create", "/TN", taskName, "/XML", xmlPath, "/F"],
                 TimeSpan.FromSeconds(45),
@@ -28,8 +28,8 @@ public sealed class TaskSchedulerService(WindowsCommandRunner commandRunner) {
         }
     }
 
-    public async Task<string> QueryAsync(string taskName) {
-        var result = await commandRunner.RunRequiredAsync(
+    public static async Task<string> QueryAsync(string taskName) {
+        var result = await WindowsCommandRunner.RunRequiredAsync(
             Path.Combine(Environment.SystemDirectory, "schtasks.exe"),
             ["/Query", "/TN", taskName, "/FO", "LIST", "/V"],
             TimeSpan.FromSeconds(30),
@@ -37,7 +37,7 @@ public sealed class TaskSchedulerService(WindowsCommandRunner commandRunner) {
         return result.StandardOutput;
     }
 
-    public async Task UnregisterAsync(string taskName) {
+    public static async Task UnregisterAsync(string taskName) {
         var storedTaskPath = Path.Combine(
             Environment.SystemDirectory,
             "Tasks",
@@ -47,7 +47,7 @@ public sealed class TaskSchedulerService(WindowsCommandRunner commandRunner) {
             return;
         }
 
-        _ = await commandRunner.RunRequiredAsync(
+        _ = await WindowsCommandRunner.RunRequiredAsync(
             Path.Combine(Environment.SystemDirectory, "schtasks.exe"),
             ["/Delete", "/TN", taskName, "/F"],
             TimeSpan.FromSeconds(45),

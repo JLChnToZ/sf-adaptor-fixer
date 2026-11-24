@@ -4,14 +4,14 @@ using System.Runtime.Versioning;
 namespace SFAdaptorFixer;
 
 [SupportedOSPlatform("windows")]
-public sealed partial class WlanScanner {
+public static partial class WlanScanner {
     public static int Count6GHz(string descriptionMatch, int waitMilliseconds = 4_000) {
         if (WlanOpenHandle(2, default, out _, out var handle) != 0) return -1;
 
         try {
             if (WlanEnumInterfaces(handle, default, out var interfaceList) != 0) return -1;
 
-            Guid target = Guid.Empty;
+            var target = Guid.Empty;
             try {
                 var count = Marshal.ReadInt32(interfaceList, 0);
                 for (var i = 0; i < count; i++) {

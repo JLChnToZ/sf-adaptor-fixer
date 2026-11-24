@@ -1,14 +1,10 @@
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Text;
 
 namespace SFAdaptorFixer;
 
-public sealed class WindowsCommandRunner : IDisposable {
-    private bool _disposed;
-
-    public async Task<CommandResult> RunAsync(string fileName, IEnumerable<string> arguments, TimeSpan timeout, bool throwOnTimeout = true) {
-        ObjectDisposedException.ThrowIf(_disposed, this);
+public sealed class WindowsCommandRunner {
+    public static async Task<CommandResult> RunAsync(string fileName, IEnumerable<string> arguments, TimeSpan timeout, bool throwOnTimeout = true) {
 
         var startInfo = new ProcessStartInfo(fileName) {
             UseShellExecute = false,
@@ -39,11 +35,11 @@ public sealed class WindowsCommandRunner : IDisposable {
             } catch (InvalidOperationException) { }
             throw new TimeoutException(Localization.Format("CommandTimeout", fileName, timeout.TotalSeconds));
         }
-
-        return new CommandResult(process.HasExited ? process.ExitCode : -1, await outputTask, await errorTask);
+        var result = await Task.WhenAll(outputTask, errorTask);
+        return new CommandResult(process.HasExited ? process.ExitCode : -1, result[0], result[1]);
     }
 
-    public async Task<CommandResult> RunRequiredAsync(string fileName, IEnumerable<string> arguments, TimeSpan timeout, string operation) {
+    public static async Task<CommandResult> RunRequiredAsync(string fileName, IEnumerable<string> arguments, TimeSpan timeout, string operation) {
         var result = await RunAsync(fileName, arguments, timeout);
         if (!result.Succeeded) {
             var details = FirstNonEmptyLine(result.StandardError, result.StandardOutput);
@@ -57,12 +53,10 @@ public sealed class WindowsCommandRunner : IDisposable {
     private static string FirstNonEmptyLine(string first, string second) {
         foreach (var value in new[] { first, second }) {
             var line = value.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries)
-                .Select(item => item.Trim())
-                .FirstOrDefault(item => item.Length > 0);
+                .Select(static item => item.Trim())
+                .FirstOrDefault(static item => item.Length > 0);
             if (line is not null) return line;
         }
         return "";
     }
-
-    public void Dispose() => _disposed = true;
 }

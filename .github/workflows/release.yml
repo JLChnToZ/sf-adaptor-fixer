@@ -1,9 +1,12 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
+    inputs:
+      version_code:
+        description: "Release version (for example, 1.2.3; a leading v is optional)"
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -14,7 +17,30 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Check out tag
+      - name: Prepare release version
+        shell: pwsh
+        env:
+          INPUT_VERSION: ${{ inputs.version_code }}
+        run: |
+          $version = $env:INPUT_VERSION.Trim()
+          if ($version.StartsWith("v", [System.StringComparison]::OrdinalIgnoreCase)) {
+            $version = $version.Substring(1)
+          }
+
+          if ($version -notmatch '^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-[0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*)?$') {
+            throw "Version '$env:INPUT_VERSION' is invalid. Use a semantic version such as 1.2.3 or 1.2.3-beta.1."
+          }
+
+          $numericParts = @($Matches.major, $Matches.minor, $Matches.patch)
+          if ($numericParts | Where-Object { [int]$_ -gt 65535 }) {
+            throw "Major, minor, and patch numbers must not exceed 65535."
+          }
+
+          "RELEASE_VERSION=$version" >> $env:GITHUB_ENV
+          "RELEASE_TAG=v$version" >> $env:GITHUB_ENV
+          "ASSEMBLY_VERSION=$($Matches.major).$($Matches.minor).$($Matches.patch).0" >> $env:GITHUB_ENV
+
+      - name: Check out release revision
         uses: actions/checkout@v4
 
       - name: Set up .NET
@@ -34,6 +60,11 @@ jobs:
           --configuration Release
           --runtime win-x64
           --self-contained true
+          --property:Version="$env:RELEASE_VERSION"
+          --property:AssemblyVersion="$env:ASSEMBLY_VERSION"
+          --property:FileVersion="$env:ASSEMBLY_VERSION"
+          --property:InformationalVersion="$env:RELEASE_VERSION"
+          --property:IncludeSourceRevisionInInformationalVersion=false
           --output .\artifacts\self-contained
 
       - name: Publish framework-dependent build
@@ -42,6 +73,11 @@ jobs:
           --configuration Release
           --runtime win-x64
           --self-contained false
+          --property:Version="$env:RELEASE_VERSION"
+          --property:AssemblyVersion="$env:ASSEMBLY_VERSION"
+          --property:FileVersion="$env:ASSEMBLY_VERSION"
+          --property:InformationalVersion="$env:RELEASE_VERSION"
+          --property:IncludeSourceRevisionInInformationalVersion=false
           --output .\artifacts\framework-dependent
 
       - name: Package release archives
@@ -50,19 +86,21 @@ jobs:
           New-Item -ItemType Directory -Force -Path .\artifacts\release | Out-Null
           Compress-Archive `
             -Path .\artifacts\self-contained\* `
-            -DestinationPath .\artifacts\release\SFAdaptorFixer-${{ github.ref_name }}-win-x64-self-contained.zip `
+            -DestinationPath ".\artifacts\release\SFAdaptorFixer-$env:RELEASE_TAG-win-x64-self-contained.zip" `
             -Force
           Compress-Archive `
             -Path .\artifacts\framework-dependent\* `
-            -DestinationPath .\artifacts\release\SFAdaptorFixer-${{ github.ref_name }}-win-x64-framework-dependent.zip `
+            -DestinationPath ".\artifacts\release\SFAdaptorFixer-$env:RELEASE_TAG-win-x64-framework-dependent.zip" `
             -Force
 
       - name: Create GitHub release
+        shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
-        run: >
-          gh release create "${{ github.ref_name }}"
-          .\artifacts\release\SFAdaptorFixer-${{ github.ref_name }}-win-x64-self-contained.zip
-          .\artifacts\release\SFAdaptorFixer-${{ github.ref_name }}-win-x64-framework-dependent.zip
-          --title "SFAdaptorFixer ${{ github.ref_name }}"
-          --generate-notes
+        run: |
+          gh release create "$env:RELEASE_TAG" `
+            ".\artifacts\release\SFAdaptorFixer-$env:RELEASE_TAG-win-x64-self-contained.zip" `
+            ".\artifacts\release\SFAdaptorFixer-$env:RELEASE_TAG-win-x64-framework-dependent.zip" `
+            --target "$env:GITHUB_SHA" `
+            --title "SFAdaptorFixer $env:RELEASE_TAG" `
+            --generate-notes

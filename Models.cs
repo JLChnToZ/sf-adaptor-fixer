@@ -11,7 +11,7 @@ public enum CommandMode : byte {
 public sealed record ApplicationArguments(CommandMode Mode);
 
 public static class ApplicationArgumentParser {
-    public static ApplicationArguments? Parse(string[] args) => args switch {
+    public static ApplicationArguments? Parse(ReadOnlySpan<string> args) => args switch {
         [] => new ApplicationArguments(CommandMode.Interactive),
         ["register"] => new ApplicationArguments(CommandMode.Register),
         ["unregister"] => new ApplicationArguments(CommandMode.Unregister),
@@ -20,12 +20,12 @@ public static class ApplicationArgumentParser {
         _ => null
     };
 
-    public static string[]? ParseInteractiveSelection(string? selection) => selection?.Trim() switch {
-        "1" => ["--on"],
-        "2" => ["--off"],
-        "3" => ["register"],
-        "4" => ["unregister"],
-        "0" => [],
+    public static CommandMode? ParseInteractiveSelection(ConsoleKey selection) => selection switch {
+        ConsoleKey.D1 or ConsoleKey.NumPad1 => CommandMode.TurnOn,
+        ConsoleKey.D2 or ConsoleKey.NumPad2 => CommandMode.TurnOff,
+        ConsoleKey.D3 or ConsoleKey.NumPad3 => CommandMode.Register,
+        ConsoleKey.D4 or ConsoleKey.NumPad4 => CommandMode.Unregister,
+        ConsoleKey.D0 or ConsoleKey.NumPad0 => CommandMode.Interactive,
         _ => null
     };
 }
@@ -55,7 +55,7 @@ public static class StateClassifier {
 
         if (configManagerErrorCode == 22)
             return new NicState(NicStateKind.Disabled, "Disabled");
-
+    
         if (status?.Equals("OK", StringComparison.OrdinalIgnoreCase) == true &&
             configManagerErrorCode == 0)
             return new NicState(NicStateKind.Enabled, "Enabled");

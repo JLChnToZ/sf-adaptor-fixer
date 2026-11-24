@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Globalization;
 using System.Text;
 using Xunit;
@@ -49,32 +48,30 @@ public sealed class CoreBehaviorTests {
 
     [Fact]
     public void Parse_NoArguments_OpensInteractiveMenu() {
-        var result = ApplicationArgumentParser.Parse([]);
+        var result = ApplicationArgumentParser.Parse(Array.Empty<string>());
 
         Assert.NotNull(result);
         Assert.Equal(CommandMode.Interactive, result.Mode);
     }
 
     [Theory]
-    [InlineData("1", "--on")]
-    [InlineData("2", "--off")]
-    [InlineData("3", "register")]
-    [InlineData("4", "unregister")]
-    public void ParseInteractiveSelection_ReturnsRequestedCommand(string selection, string expected) {
+    [InlineData(ConsoleKey.D1, CommandMode.TurnOn)]
+    [InlineData(ConsoleKey.D2, CommandMode.TurnOff)]
+    [InlineData(ConsoleKey.D3, CommandMode.Register)]
+    [InlineData(ConsoleKey.D4, CommandMode.Unregister)]
+    public void ParseInteractiveSelection_ReturnsRequestedCommand(ConsoleKey selection, CommandMode expected) {
         var result = ApplicationArgumentParser.ParseInteractiveSelection(selection);
-
-        Assert.NotNull(result);
-        Assert.Equal([expected], result);
+        Assert.Equal(expected, result);
     }
 
     [Fact]
     public void ParseInteractiveSelection_ExitReturnsNoCommand() {
-        Assert.Empty(ApplicationArgumentParser.ParseInteractiveSelection("0")!);
+        Assert.Null(ApplicationArgumentParser.ParseInteractiveSelection(ConsoleKey.Escape));
     }
 
     [Fact]
     public void ParseInteractiveSelection_RejectsUnknownInput() {
-        Assert.Null(ApplicationArgumentParser.ParseInteractiveSelection("9"));
+        Assert.Null(ApplicationArgumentParser.ParseInteractiveSelection(ConsoleKey.D9));
     }
 
     [Theory]

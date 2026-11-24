@@ -57,6 +57,13 @@ The framework-dependent artifact is:
 bin\Release\net10.0-windows\framework-dependent\SFAdaptorFixer.exe
 ```
 
+## Release
+
+Releases are created manually from the **Release** GitHub Actions workflow. Enter
+the version code, such as `1.2.3` or `1.2.3-beta.1`, when dispatching the
+workflow. The workflow creates the corresponding `v`-prefixed tag and applies
+the version to the published binaries' file, assembly, and product metadata.
+
 `register` and `unregister` affect scheduled tasks and require administrator
 approval. `--on` and `--off` can disable network connectivity, so integration
 validation must be performed on the intended Windows computer with the Valve

@@ -1,25 +1,20 @@
 using System.Management;
 using System.Runtime.Versioning;
 using System.Security.Principal;
-using System.Text;
 
 namespace SFAdaptorFixer;
 
 [SupportedOSPlatform("windows")]
-public sealed class RegistrationService(NicDeviceService devices, WindowsCommandRunner commandRunner) {
-    public async Task RegisterAsync() {
+public static class RegistrationService {
+    public static async Task RegisterAsync() {
         using var identity = WindowsIdentity.GetCurrent();
         var userName = identity.Name;
         var consoleUser = GetConsoleUserName();
-        if (!string.IsNullOrWhiteSpace(consoleUser) &&
-            !string.Equals(consoleUser, userName, StringComparison.OrdinalIgnoreCase)) {
-            throw new InvalidOperationException(
-                Localization.Format("ConsoleUserMismatch", userName, consoleUser));
-        }
+        if (!string.IsNullOrWhiteSpace(consoleUser) && !string.Equals(consoleUser, userName, StringComparison.OrdinalIgnoreCase))
+            throw new InvalidOperationException(Localization.Format("ConsoleUserMismatch", userName, consoleUser));
 
-        if (!devices.HasValveDevice) {
+        if (!NicDeviceService.HasValveDevice)
             ConsoleOutput.WriteWarning(Localization.Get("RegisterDeviceMissing"));
-        }
 
         _ = Directory.CreateDirectory(AppPaths.InstallDirectory);
         InstallExecutable();
@@ -29,15 +24,14 @@ public sealed class RegistrationService(NicDeviceService devices, WindowsCommand
             new(AppPaths.OffTaskName, "--off", Localization.Get("OffTaskDescription"))
         };
 
-        var scheduler = new TaskSchedulerService(commandRunner);
         foreach (var definition in definitions) {
-            await scheduler.RegisterAsync(definition.TaskName, definition.Arguments, definition.Description, userName);
+            await TaskSchedulerService.RegisterAsync(definition.TaskName, definition.Arguments, definition.Description, userName);
             ConsoleOutput.WriteSuccess(Localization.Format("TaskRegistered", definition.TaskName));
         }
 
         Console.WriteLine();
         foreach (var definition in definitions)
-            Console.WriteLine(await scheduler.QueryAsync(definition.TaskName));
+            Console.WriteLine(await TaskSchedulerService.QueryAsync(definition.TaskName));
 
         ConsoleOutput.WriteSuccess(Localization.Get("RegisterSuccess"));
         ConsoleOutput.WriteMuted(Localization.Get("TaskRunHint"));
@@ -46,17 +40,14 @@ public sealed class RegistrationService(NicDeviceService devices, WindowsCommand
     }
 
     private static void InstallExecutable() {
-        var source = Environment.ProcessPath
-            ?? throw new InvalidOperationException(Localization.Get("ProcessPathMissing"));
-        if (!string.Equals(
-                Path.GetFullPath(source),
-                Path.GetFullPath(AppPaths.InstalledExecutable),
-                StringComparison.OrdinalIgnoreCase)) {
-            File.Copy(source, AppPaths.InstalledExecutable, overwrite: true);
-            ConsoleOutput.WriteSuccess(Localization.Format("ProgramInstalled", AppPaths.InstalledExecutable));
-        } else {
-            ConsoleOutput.WriteMuted(Localization.Format("ProgramAlreadyInstalled", AppPaths.InstalledExecutable));
+        var source = Environment.ProcessPath ?? throw new InvalidOperationException(Localization.Get("ProcessPathMissing"));
+        var installed = AppPaths.InstalledExecutable;
+        if (string.Equals(Path.GetFullPath(source), Path.GetFullPath(installed), StringComparison.OrdinalIgnoreCase)) {
+            ConsoleOutput.WriteMuted(Localization.Format("ProgramAlreadyInstalled", installed));
+            return;
         }
+        File.Copy(source, installed, overwrite: true);
+        ConsoleOutput.WriteSuccess(Localization.Format("ProgramInstalled", installed));
     }
 
     private static string? GetConsoleUserName() {
@@ -64,8 +55,8 @@ public sealed class RegistrationService(NicDeviceService devices, WindowsCommand
         using var searcher = new ManagementObjectSearcher(@"root\cimv2", query);
         return searcher.Get()
             .Cast<ManagementObject>()
-            .Select(item => item.Properties["UserName"]?.Value as string)
-            .FirstOrDefault(item => !string.IsNullOrWhiteSpace(item));
+            .Select(static item => item.Properties["UserName"]?.Value as string)
+            .FirstOrDefault(static item => !string.IsNullOrWhiteSpace(item));
     }
 
     private sealed record TaskDefinition(

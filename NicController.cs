@@ -3,17 +3,14 @@ using System.Runtime.Versioning;
 namespace SFAdaptorFixer;
 
 [SupportedOSPlatform("windows")]
-public sealed class NicController(
-    NicDeviceService devices,
-    TextLogger logger) {
+public sealed class NicController(TextLogger logger) {
+
     public async Task<int> TurnOnAsync() {
         Console.Title = Localization.Get("OnTitle");
         ConsoleOutput.HorizontalRule();
 
         var device = NicDeviceService.FindDevice();
-        var state = device is null
-            ? new NicState(NicStateKind.NotFound, "NotFound")
-            : device.State;
+        var state = device is null ? new NicState(NicStateKind.NotFound, "NotFound") : device.State;
         var bssCount = -1;
         const int maxTry = 3;
 
@@ -21,29 +18,21 @@ public sealed class NicController(
             Console.WriteLine(Localization.Format("ResetAttempt", attempt, maxTry));
             await ResetDeviceAsync(device);
             state = NicDeviceService.GetState(device?.InstanceId);
-            if (state.Kind != NicStateKind.Enabled) {
-                break;
-            }
+            if (state.Kind != NicStateKind.Enabled) break;
 
             Console.WriteLine(Localization.Get("Scanning6GHz"));
             var adapter = NicDeviceService.FindAdapter(device?.InstanceId);
-            var description = adapter?.InterfaceDescription ?? "8832CU";
+            var description = adapter?.InterfaceDescription ?? NicDeviceService.DefaultAdapterDescription;
             bssCount = -1;
-            for (var scan = 0; scan < 4 && bssCount <= 0; scan++) {
+            for (var scan = 0; scan < 4 && bssCount <= 0; scan++)
                 bssCount = WlanScanner.Count6GHz(description);
-            }
 
             logger.Write($"ON   -> try {attempt}  {state.DisplayName}  6GHz BSS={bssCount}");
-            if (bssCount > 0) {
-                break;
-            }
+            if (bssCount > 0) break;
         }
 
         WriteResultForTurnOn(state, bssCount, maxTry);
-        await ConsoleOutput.DelayAsync(
-            state.Kind == NicStateKind.Enabled && bssCount > 0
-                ? TimeSpan.FromSeconds(3)
-                : TimeSpan.FromSeconds(15));
+        await ConsoleOutput.DelayAsync(state.Kind == NicStateKind.Enabled && bssCount > 0 ? TimeSpan.FromSeconds(3) : TimeSpan.FromSeconds(15));
 
         return state.Kind == NicStateKind.Enabled && bssCount > 0 ? 0 : 1;
     }
@@ -54,12 +43,10 @@ public sealed class NicController(
         Console.WriteLine(Localization.Get("OffStep1"));
 
         var device = NicDeviceService.FindDevice();
-        await devices.SetInterfaceEnabledAsync(device?.InstanceId, false);
+        await NicDeviceService.SetInterfaceEnabledAsync(device?.InstanceId, false);
 
         Console.WriteLine(Localization.Get("OffStep2"));
-        if (device is not null) {
-            await devices.SetDeviceEnabledAsync(device.InstanceId, false);
-        }
+        if (device is not null) await NicDeviceService.SetDeviceEnabledAsync(device.InstanceId, false);
 
         await Task.Delay(TimeSpan.FromSeconds(1));
         var state = NicDeviceService.GetState(device?.InstanceId);
@@ -86,19 +73,19 @@ public sealed class NicController(
         return state.Kind is NicStateKind.NotFound or NicStateKind.Disabled or NicStateKind.NotPresent ? 0 : 1;
     }
 
-    private async Task ResetDeviceAsync(NicDevice? device) {
+    private static async Task ResetDeviceAsync(NicDevice? device) {
         if (device is null) return;
 
         if (NicDeviceService.GetState(device.InstanceId).Kind == NicStateKind.Enabled) {
-            await devices.SetInterfaceEnabledAsync(device.InstanceId, false);
-            await devices.SetDeviceEnabledAsync(device.InstanceId, false);
+            await NicDeviceService.SetInterfaceEnabledAsync(device.InstanceId, false);
+            await NicDeviceService.SetDeviceEnabledAsync(device.InstanceId, false);
             await Task.Delay(TimeSpan.FromSeconds(2));
         }
 
-        await devices.SetDeviceEnabledAsync(device.InstanceId, true);
-        await devices.RescanDevicesAsync();
+        await NicDeviceService.SetDeviceEnabledAsync(device.InstanceId, true);
+        await NicDeviceService.RescanDevicesAsync();
         await Task.Delay(TimeSpan.FromSeconds(2));
-        await devices.SetInterfaceEnabledAsync(device.InstanceId, true);
+        await NicDeviceService.SetInterfaceEnabledAsync(device.InstanceId, true);
     }
 
     private void WriteResultForTurnOn(NicState state, int bssCount, int maxTry) {
