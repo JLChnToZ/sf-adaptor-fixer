@@ -18,6 +18,9 @@ VR network adapter.
   then verify that it is safe to remove power.
 - `SFAdaptorFixer.exe status`: inspect the adapter state without changing it.
 
+Operation logs are written to `%LOCALAPPDATA%\SFAdaptorFixer\VRNIC.log`,
+which remains accessible to the desktop user.
+
 The scheduled tasks run the installed executable directly. PowerShell and
 desktop batch launchers are not required.
 

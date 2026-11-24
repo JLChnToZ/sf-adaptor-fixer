@@ -24,7 +24,7 @@ public sealed class NicController(TextLogger logger) {
 
         Console.WriteLine(Localization.Format("StatusResult", label));
         ConsoleOutput.HorizontalRule();
-        await Task.CompletedTask;
+        ConsoleOutput.PauseForInput();
         return state.Kind is NicStateKind.Enabled or NicStateKind.Disabled or NicStateKind.NotPresent or NicStateKind.NotFound ? 0 : 1;
     }
 

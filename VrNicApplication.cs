@@ -32,10 +32,14 @@ public static class VrNicApplication {
             return await RunInteractiveAsync();
         }
 
-        if (!IsAdministrator() && parsed.Mode != CommandMode.Status) {
-            if (parsed.Mode is CommandMode.TurnOn or CommandMode.TurnOff) {
+        return await RunAsync(parsed.Mode);
+    }
+
+    public static async Task<int> RunAsync(CommandMode mode) {
+        if (!IsAdministrator() && mode != CommandMode.Status) {
+            if (mode is CommandMode.TurnOn or CommandMode.TurnOff) {
                 try {
-                    if (await ScheduledTaskDelegator.TryRunAsync(parsed.Mode)) {
+                    if (await ScheduledTaskDelegator.TryRunAsync(mode)) {
                         ConsoleOutput.WriteMuted(Localization.Get("DelegatingToTask"));
                         return 0;
                     }
@@ -43,14 +47,9 @@ public static class VrNicApplication {
                 } catch (TimeoutException) {
                 }
             }
-
-            return RelaunchAsAdministrator(args);
+            return RelaunchAsAdministrator(mode);
         }
-
-        return await RunAsync(parsed.Mode);
-    }
-
-    public static async Task<int> RunAsync(CommandMode mode) {
+    
         try {
             var runner = new WindowsCommandRunner();
             var logger = new TextLogger(AppPaths.LogFile);
@@ -85,13 +84,14 @@ public static class VrNicApplication {
         return principal.IsInRole(WindowsBuiltInRole.Administrator);
     }
 
-    private static int RelaunchAsAdministrator(ReadOnlySpan<string> args) {
+    private static int RelaunchAsAdministrator(CommandMode mode) {
         try {
             var startInfo = new ProcessStartInfo(Environment.ProcessPath ?? throw new InvalidOperationException(Localization.Get("ProcessPathMissing"))) {
                 UseShellExecute = true,
                 Verb = "runas"
             };
-            foreach (var arg in args) startInfo.ArgumentList.Add(arg);
+            var argument = ApplicationArgumentParser.ToCommandLineArgument(mode);
+            if (!string.IsNullOrEmpty(argument)) startInfo.ArgumentList.Add(argument);
             _ = Process.Start(startInfo);
             return 0;
         } catch (Exception ex) {
@@ -117,7 +117,10 @@ public static class VrNicApplication {
             Console.WriteLine();
             Console.Write(Localization.Get("MenuPrompt"));
 
-            if (ApplicationArgumentParser.ParseInteractiveSelection(Console.ReadKey().Key) is not { } selectedMode) {
+            var key = Console.ReadKey();
+            Console.WriteLine();
+
+            if (ApplicationArgumentParser.ParseInteractiveSelection(key.Key) is not { } selectedMode) {
                 ConsoleOutput.WriteWarning(Localization.Get("MenuInvalidSelection"));
                 await Task.Delay(TimeSpan.FromSeconds(1));
                 continue;

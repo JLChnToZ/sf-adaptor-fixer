@@ -22,6 +22,16 @@ public static class ApplicationArgumentParser {
         _ => null
     };
 
+    public static string ToCommandLineArgument(CommandMode mode) => mode switch {
+        CommandMode.Interactive => "",
+        CommandMode.Register => "register",
+        CommandMode.Unregister => "unregister",
+        CommandMode.TurnOn => "on",
+        CommandMode.TurnOff => "off",
+        CommandMode.Status => "status",
+        _ => throw new ArgumentOutOfRangeException(nameof(mode), mode, null)
+    };
+
     public static CommandMode? ParseInteractiveSelection(ConsoleKey selection) => selection switch {
         ConsoleKey.D1 or ConsoleKey.NumPad1 => CommandMode.TurnOn,
         ConsoleKey.D2 or ConsoleKey.NumPad2 => CommandMode.TurnOff,

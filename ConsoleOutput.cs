@@ -12,11 +12,12 @@ public static class ConsoleOutput {
     public static void WriteMuted(string text) => WriteColor(text, ConsoleColor.DarkGray);
 
     public static void PauseForInput() {
+        if (Console.IsInputRedirected) return;
         Console.Write(Localization.Get("PressEnter"));
         _ = Console.ReadLine();
     }
 
-    public static async Task DelayAsync(TimeSpan delay) => await Task.Delay(delay);
+    public static Task DelayAsync(TimeSpan delay) => Console.IsInputRedirected ? Task.CompletedTask : Task.Delay(delay);
 
     private static void WriteColor(string text, ConsoleColor color) {
         var original = Console.ForegroundColor;

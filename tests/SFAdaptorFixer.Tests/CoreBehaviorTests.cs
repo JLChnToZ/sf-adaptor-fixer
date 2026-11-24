@@ -44,6 +44,10 @@ public sealed class CoreBehaviorTests {
         Assert.Equal(
             Path.Combine(programFiles, "VRNic", "SFAdaptorFixer.exe"),
             AppPaths.InstalledExecutable);
+        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        Assert.Equal(
+            Path.Combine(localAppData, "SFAdaptorFixer", "VRNIC.log"),
+            AppPaths.LogFile);
     }
 
     [Fact]
